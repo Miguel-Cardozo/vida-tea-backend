@@ -10,6 +10,10 @@ export const enviarMensagem = async (req, res) => {
 
     const emailDestino = process.env.EMAIL_DESTINO || process.env.EMAIL_DESTIN0;
 
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+    console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "OK" : "VAZIO");
+    console.log("EMAIL_DESTINO:", process.env.EMAIL_DESTINO);
+    
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !emailDestino) {
       return res.status(500).json({
         message: "Variáveis de e-mail não configuradas no servidor.",
@@ -17,7 +21,10 @@ export const enviarMensagem = async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      family: 4,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -25,8 +32,7 @@ export const enviarMensagem = async (req, res) => {
       connectionTimeout: 10000,
       greetingTimeout: 10000,
       socketTimeout: 10000,
-    });
-
+    });     
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: emailDestino,
