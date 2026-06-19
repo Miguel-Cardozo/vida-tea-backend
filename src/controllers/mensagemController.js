@@ -8,7 +8,9 @@ export const enviarMensagem = async (req, res) => {
       return res.status(400).json({ message: "Mensagem é obrigatória." });
     }
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_DESTINO) {
+    const emailDestino = process.env.EMAIL_DESTINO || process.env.EMAIL_DESTIN0;
+
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !emailDestino) {
       return res.status(500).json({
         message: "Variáveis de e-mail não configuradas no servidor.",
       });
@@ -27,7 +29,7 @@ export const enviarMensagem = async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_DESTINO,
+      to: emailDestino,
       subject: `[Vida TEA] ${assunto || "Nova mensagem"}`,
       html: `
         <h2>Nova mensagem enviada pelo app</h2>
