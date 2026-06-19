@@ -111,7 +111,7 @@ export const login = (req, res) => {
           id: usuario.id,
           email: usuario.email
         },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET || "vida_tea_chave_secreta",
         {
           expiresIn: "1d"
         }
